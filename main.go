@@ -111,17 +111,37 @@ func generateDocs(
 
 func polishDocs(p pipeline.Pipeline, docs string) string {
 	fmt.Println("Polishing docs...")
-	polishedKDoc, err := p.PolishDoc(docs, prompts.KotlinKDocPolish)
-	if err != nil {
-		panic(fmt.Errorf("failed to get polished docs, error=%v", err.Error()))
+
+	tries := 2
+	for i := range tries {
+		lastTry := i == tries-1
+
+		polishedKDoc, err := p.PolishDoc(docs, prompts.KotlinKDocPolish)
+		if err != nil {
+			if lastTry {
+				panic(fmt.Errorf("failed to get polished docs, error=%v", err.Error()))
+			}
+		}
+
+		cleanedDocs, err := p.GetDocsOnly(polishedKDoc)
+		cleanedDocs = strings.TrimSpace(cleanedDocs)
+
+		if err == nil {
+			if len(cleanedDocs) != 0 {
+				return cleanedDocs
+			}
+		} else {
+			if lastTry {
+				fmt.Println(polishedKDoc)
+				panic(fmt.Errorf("failed to extract kdoc from polished docs, error=%v", err.Error()))
+			}
+		}
+
+		fmt.Println("Failed to generate polished docs!")
+		fmt.Printf("Try %v: ", i+1)
 	}
 
-	cleanedDocs, err := p.GetDocsOnly(polishedKDoc)
-	if err != nil {
-		fmt.Println(polishedKDoc)
-		panic(fmt.Errorf("failed to extract kdoc from polished docs, error=%v", err.Error()))
-	}
-	return cleanedDocs
+	panic(fmt.Errorf("failed to generate polished doc, docs=\n%v", docs))
 }
 
 func extractSignature(function string) string {
