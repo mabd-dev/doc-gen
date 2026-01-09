@@ -6,16 +6,6 @@ Automatically generate high-quality KDoc documentation for your Kotlin functions
 
 Documentation is critical for maintainable code, yet it's often the first thing to fall behind in fast-paced development. Manual documentation is time-consuming, inconsistent, and rarely reflects the actual behavior of the code. This tool bridges that gap.
 
-## The Documentation Problem
-
-Modern software teams face a persistent challenge:
-
-- **Time Pressure**: Writing comprehensive documentation takes time developers don't have
-- **Inconsistency**: Different developers document in different styles and levels of detail
-- **Staleness**: Documentation quickly becomes outdated as code evolves
-- **Cognitive Load**: Context-switching between coding and writing documentation breaks flow
-- **Onboarding Friction**: New team members struggle to understand undocumented or poorly documented code
-
 ## How This Tool Helps
 
 This CLI tool analyzes your Kotlin functions and generates accurate, consistent KDoc comments automatically. Instead of spending hours writing documentation, you get:
@@ -45,10 +35,10 @@ Uses local LLM models via Ollama. Your code never leaves your machine, making it
 
 ```bash
 # Generate documentation for a Kotlin function
-cat your-function.kt | ./doc-gen
+cat your-function.kt | ./doc-gen-ai
 
 # With verbose output to see the analysis stages
-cat your-function.kt | ./doc-gen -verbose
+cat your-function.kt | ./doc-gen-ai -verbose
 ```
 
 ## Use Cases
@@ -61,13 +51,21 @@ cat your-function.kt | ./doc-gen -verbose
 
 ## Requirements
 
-- Go 1.x or later
+- Go 1.24 or later
 - Ollama running locally with compatible models
 
-## The Bottom Line
+## Local Models I Am Using
 
-Good documentation shouldn't be a luxury. This tool makes it the default. Spend your time writing code that matters, and let AI handle the documentation that makes it understandable.
+#### qwen2.5-coder:7b
+for code analysis and documentation generation
 
----
+#### llama3.2:3b
+for documentation pollishing
 
-**Built with**: Go | Ollama | Local AI Models
+### Pipeline
+
+1. **Analysis Stage**: Analyzes the Kotlin function code to extract verifiable facts (return type, suspend status, error handling, side effects, etc.)
+2. **Generation Stage**: Generates initial KDoc based on the analysis and function signature
+3. **Polish Stage**: Refines the generated KDoc for clarity and consistency
+
+
