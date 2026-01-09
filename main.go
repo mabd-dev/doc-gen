@@ -20,7 +20,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(functionSignature)
+	// fmt.Println(functionSignature)
 
 	client := &ollama.Client{
 		BaseURL:        "http://localhost:11434",
@@ -35,9 +35,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("======= Analysis ========")
-	fmt.Println(analysis)
-	fmt.Println("=============")
+	// fmt.Println("======= Analysis ========")
+	// fmt.Println(analysis)
+	// fmt.Println("=============")
 
 	fmt.Println("Generating docs...")
 	docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
@@ -50,10 +50,11 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("====== KDOC =======")
-	fmt.Println(cleanedDocs)
-	fmt.Println("=============")
+	// fmt.Println("====== KDOC =======")
+	// fmt.Println(cleanedDocs)
+	// fmt.Println("=============")
 
+	fmt.Println("Polishing docs...")
 	polishedKDoc, err := p.PolishDoc(docs, prompts.KotlinKDocPolish)
 	if err != nil {
 		panic(err)
@@ -64,9 +65,9 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("====== POLISHED KDOC =======")
+	//fmt.Println("====== POLISHED KDOC =======")
 	fmt.Println(cleanedDocs)
-	fmt.Println("=============")
+	//fmt.Println("=============")
 }
 
 func extractSignature(function string) string {
