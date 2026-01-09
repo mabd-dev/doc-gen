@@ -40,3 +40,8 @@ func (p Pipeline) GetDocsOnly(docs string) (string, error) {
 	err := fmt.Errorf("could not find kdoc in llm response")
 	return "", err
 }
+
+func (p Pipeline) PolishDoc(doc, prompt string) (string, error) {
+	finalPrompt := strings.Replace(prompt, "{{KDOC}}", doc, 1)
+	return p.Ollama.Generate(finalPrompt)
+}

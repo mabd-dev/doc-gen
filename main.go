@@ -52,6 +52,20 @@ func main() {
 	fmt.Println("====== KDOC =======")
 	fmt.Println(cleanedDocs)
 	fmt.Println("=============")
+
+	polishedKDoc, err := p.PolishDoc(docs, prompts.KotlinKDocPolish)
+	if err != nil {
+		panic(err)
+	}
+
+	cleanedDocs, err = p.GetDocsOnly(polishedKDoc)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("====== POLISHED KDOC =======")
+	fmt.Println(cleanedDocs)
+	fmt.Println("=============")
 }
 
 func extractSignature(function string) string {
