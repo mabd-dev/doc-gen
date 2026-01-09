@@ -1,6 +1,6 @@
 package prompts
 
-var kotlinAnalyze = `
+var KotlinAnalyze = `
 You are a senior Kotlin software engineer.
 
 Task:
