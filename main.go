@@ -38,10 +38,14 @@ func main() {
 	p := &pipeline.Pipeline{Ollama: client}
 
 	analysis := analyizeFunction(*p, string(input), *verbose)
-	cleanedDocs := generateDocs(*p, analysis, functionSignature, *verbose)
-	cleanedDocs = polishDocs(*p, cleanedDocs)
+	docs := generateDocs(*p, analysis, functionSignature, *verbose)
+	docs = polishDocs(*p, docs)
 
-	fmt.Println(cleanedDocs)
+	if !isValidKDoc(docs) {
+		panic(fmt.Errorf("failed to generate docs, result is not valid, result=\n%v", docs))
+	}
+
+	fmt.Println(docs)
 }
 
 func analyizeFunction(
@@ -132,4 +136,9 @@ func extractSignature(function string) string {
 		}
 	}
 	return ""
+}
+
+func isValidKDoc(s string) bool {
+	return strings.HasPrefix(strings.TrimSpace(s), "/**") &&
+		strings.HasSuffix(strings.TrimSpace(s), "*/")
 }
