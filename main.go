@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -12,6 +13,10 @@ import (
 )
 
 func main() {
+	verbose := flag.Bool("verbose", false, "Print verbose logs")
+
+	flag.Parse()
+
 	input, _ := io.ReadAll(os.Stdin)
 
 	functionSignature := extractSignature(string(input))
@@ -20,7 +25,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// fmt.Println(functionSignature)
+	if *verbose {
+		fmt.Println(functionSignature)
+	}
 
 	client := &ollama.Client{
 		BaseURL:        "http://localhost:11434",
@@ -30,44 +37,87 @@ func main() {
 
 	p := &pipeline.Pipeline{Ollama: client}
 
+	analysis := analyizeFunction(*p, string(input), *verbose)
+	cleanedDocs := generateDocs(*p, analysis, functionSignature, *verbose)
+	cleanedDocs = polishDocs(*p, cleanedDocs)
+
+	fmt.Println(cleanedDocs)
+}
+
+func analyizeFunction(
+	p pipeline.Pipeline,
+	code string,
+	verbose bool,
+) string {
 	fmt.Println("Analyzing code...")
-	analysis, err := p.Analyze(string(input), prompts.KotlinAnalyze)
-	if err != nil {
-		panic(err)
-	}
-	// fmt.Println("======= Analysis ========")
-	// fmt.Println(analysis)
-	// fmt.Println("=============")
-
-	fmt.Println("Generating docs...")
-	docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
+	analysis, err := p.Analyze(code, prompts.KotlinAnalyze)
 	if err != nil {
 		panic(err)
 	}
 
-	cleanedDocs, err := p.GetDocsOnly(docs)
-	if err != nil {
-		panic(err)
+	if verbose {
+		fmt.Println(analysis)
+	}
+	return analysis
+}
+
+func generateDocs(
+	p pipeline.Pipeline,
+	analysis, functionSignature string,
+	verbose bool,
+) string {
+	cleanedDocs := ""
+
+	// Try max of 2 times to generate docs, if failed -> panic
+	for i := range 2 {
+		fmt.Println("Generating docs...")
+		docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
+		if err != nil {
+			panic(err)
+		}
+
+		docs, err = p.GetDocsOnly(docs)
+		if err != nil {
+			panic(err)
+		}
+
+		if verbose {
+			fmt.Println("generated docs:")
+			fmt.Println(docs)
+		}
+
+		if len(docs) != 0 {
+			cleanedDocs = docs
+			break
+		}
+		fmt.Println("Failed to generate docs!")
+		fmt.Printf("Try %v: ", i+1)
 	}
 
-	// fmt.Println("====== KDOC =======")
-	// fmt.Println(cleanedDocs)
-	// fmt.Println("=============")
+	if len(cleanedDocs) == 0 {
+		panic("unable to generate documentation")
+	}
 
+	if verbose {
+		fmt.Println(cleanedDocs)
+	}
+
+	return cleanedDocs
+}
+
+func polishDocs(p pipeline.Pipeline, docs string) string {
 	fmt.Println("Polishing docs...")
 	polishedKDoc, err := p.PolishDoc(docs, prompts.KotlinKDocPolish)
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("failed to get polished docs, error=%v", err.Error()))
 	}
 
-	cleanedDocs, err = p.GetDocsOnly(polishedKDoc)
+	cleanedDocs, err := p.GetDocsOnly(polishedKDoc)
 	if err != nil {
-		panic(err)
+		fmt.Println(polishedKDoc)
+		panic(fmt.Errorf("failed to extract kdoc from polished docs, error=%v", err.Error()))
 	}
-
-	//fmt.Println("====== POLISHED KDOC =======")
-	fmt.Println(cleanedDocs)
-	//fmt.Println("=============")
+	return cleanedDocs
 }
 
 func extractSignature(function string) string {
