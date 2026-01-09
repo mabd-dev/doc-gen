@@ -29,6 +29,7 @@ func main() {
 
 	p := &pipeline.Pipeline{Ollama: client}
 
+	fmt.Println("Analyzing code...")
 	analysis, err := p.Analyze(string(input), prompts.KotlinAnalyze)
 	if err != nil {
 		panic(err)
@@ -37,13 +38,19 @@ func main() {
 	fmt.Println(analysis)
 	fmt.Println("=============")
 
-	doc, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
+	fmt.Println("Generating docs...")
+	docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
+	if err != nil {
+		panic(err)
+	}
+
+	cleanedDocs, err := p.GetDocsOnly(docs)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("====== KDOC =======")
-	fmt.Println(doc)
+	fmt.Println(cleanedDocs)
 	fmt.Println("=============")
 }
 
