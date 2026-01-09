@@ -56,13 +56,13 @@ cat your-function.kt | ./doc-gen-ai -verbose
 
 ## Local Models I Am Using
 
-#### qwen2.5-coder:7b
+- qwen2.5-coder:7b
 for code analysis and documentation generation
 
-#### llama3.2:3b
+- llama3.2:3b
 for documentation pollishing
 
-### Pipeline
+## Pipeline
 
 1. **Analysis Stage**: Analyzes the Kotlin function code to extract verifiable facts (return type, suspend status, error handling, side effects, etc.)
 2. **Generation Stage**: Generates initial KDoc based on the analysis and function signature
