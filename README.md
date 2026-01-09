@@ -56,15 +56,14 @@ cat your-function.kt | ./doc-gen-ai -verbose
 
 ## Local Setup
 
-- Macbook Pro m3 pro with 18gb ram
+This tool has been tested and optimized on the following configuration:
 
-- Local model 1: **qwen2.5-coder:7b**
+**Hardware**
+- MacBook Pro M3 Pro with 18GB RAM
 
-for code analysis and documentation generation
-
-- Local model 2: **llama3.2:3b**
-
-for documentation pollishing
+**AI Models** (via Ollama)
+- **qwen2.5-coder:7b** - Used for code analysis and documentation generation
+- **llama3.2:3b** - Used for documentation polishing and refinement
 
 ## Pipeline
 
