@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/mabd-dev/doc-gen/internal/ollama"
+	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type Pipeline struct {

@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mabd-dev/doc-gen/internal/ollama"
-	"github.com/mabd-dev/doc-gen/internal/pipeline"
-	"github.com/mabd-dev/doc-gen/internal/prompts"
+	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
+	"github.com/mabd-dev/doc-gen-ai/internal/pipeline"
+	"github.com/mabd-dev/doc-gen-ai/internal/prompts"
 )
 
 func main() {
