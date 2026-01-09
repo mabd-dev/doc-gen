@@ -54,12 +54,16 @@ cat your-function.kt | ./doc-gen-ai -verbose
 - Go 1.24 or later
 - Ollama running locally with compatible models
 
-## Local Models I Am Using
+## Local Setup
 
-- qwen2.5-coder:7b
+- Macbook Pro m3 pro with 18gb ram
+
+- Local model 1: **qwen2.5-coder:7b**
+
 for code analysis and documentation generation
 
-- llama3.2:3b
+- Local model 2: **llama3.2:3b**
+
 for documentation pollishing
 
 ## Pipeline
