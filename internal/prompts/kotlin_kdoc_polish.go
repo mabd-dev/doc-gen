@@ -10,7 +10,7 @@ Rules:
 - Do NOT add new information.
 - Do NOT remove documented behavior.
 - Do NOT change meaning.
-- Do NOT add or remove @tags.
+- Do NOT add or remove @ tags.
 - Improve wording, flow, and readability only.
 - Keep it concise and professional.
 - Preserve KDoc format exactly.

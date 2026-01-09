@@ -23,8 +23,9 @@ func main() {
 	fmt.Println(functionSignature)
 
 	client := &ollama.Client{
-		BaseURL: "http://localhost:11434",
-		Model:   "qwen-kdoc",
+		BaseURL:        "http://localhost:11434",
+		BaseModel:      "qwen-kdoc",
+		DocPolishModel: "llama-kdoc:latest",
 	}
 
 	p := &pipeline.Pipeline{Ollama: client}

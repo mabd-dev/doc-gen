@@ -7,8 +7,9 @@ import (
 )
 
 type Client struct {
-	BaseURL string
-	Model   string
+	BaseURL        string
+	BaseModel      string
+	DocPolishModel string
 }
 
 type request struct {
@@ -22,8 +23,20 @@ type response struct {
 }
 
 func (c *Client) Generate(prompt string) (string, error) {
+	return c.GenerateWithModel(prompt, "")
+}
+
+func (c *Client) GenerateWithModel(
+	prompt string,
+	model string,
+) (string, error) {
+	modelToUse := c.BaseModel
+	if len(model) != 0 {
+		modelToUse = model
+	}
+
 	reqBody, _ := json.Marshal(request{
-		Model:  c.Model,
+		Model:  modelToUse,
 		Prompt: prompt,
 		Stream: false,
 	})

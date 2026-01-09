@@ -16,7 +16,7 @@ type Pipeline struct {
 func (p Pipeline) Analyze(code, prompt string) (string, error) {
 	finalPrompt := strings.Replace(prompt, "{{FUNCTION}}", code, 1)
 
-	return p.Ollama.Generate(finalPrompt)
+	return p.Ollama.GenerateWithModel(finalPrompt, p.Ollama.BaseModel)
 }
 
 func (p Pipeline) GenerateDoc(
@@ -25,7 +25,7 @@ func (p Pipeline) GenerateDoc(
 	finalPrompt := strings.Replace(prompt, "{{ANALYSIS}}", analysis, 1)
 	finalPrompt = strings.Replace(finalPrompt, "{{SIGNATURE}}", signature, 1)
 
-	return p.Ollama.Generate(finalPrompt)
+	return p.Ollama.GenerateWithModel(finalPrompt, p.Ollama.BaseModel)
 }
 
 // GetDocsOnly filter output from [GenerateDoc] function and get only the documentation part
@@ -43,5 +43,5 @@ func (p Pipeline) GetDocsOnly(docs string) (string, error) {
 
 func (p Pipeline) PolishDoc(doc, prompt string) (string, error) {
 	finalPrompt := strings.Replace(prompt, "{{KDOC}}", doc, 1)
-	return p.Ollama.Generate(finalPrompt)
+	return p.Ollama.GenerateWithModel(finalPrompt, p.Ollama.DocPolishModel)
 }
