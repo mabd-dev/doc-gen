@@ -48,6 +48,12 @@ func main() {
 	fmt.Println(docs)
 }
 
+// analyizeFunction
+//
+// Must answer: Parameters, Return semantics, Side effects, Throws
+//
+// Parameters:
+//   - code: function code to analyze
 func analyizeFunction(
 	p pipeline.Pipeline,
 	code string,
@@ -65,6 +71,10 @@ func analyizeFunction(
 	return analysis
 }
 
+// generateDocs takes a function analysis and generate docs for it
+//
+// Output:
+//   - pure valid kdoc
 func generateDocs(
 	p pipeline.Pipeline,
 	analysis, functionSignature string,
@@ -109,6 +119,13 @@ func generateDocs(
 	return cleanedDocs
 }
 
+// polishDocs takes a docs and improve clarity, writing lanuage etc...
+//
+// Parameters:
+//   - docs: valid kdoc string
+//
+// Output:
+//   - pure valid kdoc string
 func polishDocs(p pipeline.Pipeline, docs string) string {
 	fmt.Println("Polishing docs...")
 
