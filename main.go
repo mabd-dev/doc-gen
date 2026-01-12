@@ -35,10 +35,23 @@ func main() {
 		DocPolishModel: "llama-kdoc:latest",
 	}
 
-	p := &pipeline.Pipeline{Ollama: client}
+	p := pipeline.NewPipeline(client)
 
-	analysis := analyizeFunction(*p, string(input), *verbose)
+	// Step 1
+	fmt.Println("Analyzing code...")
+	analysis, err := p.Analyze(string(input), prompts.KotlinAnalyze)
+	if err != nil {
+		panic(err)
+	}
+
+	if *verbose {
+		fmt.Println(analysis)
+	}
+
+	// Step 2
 	docs := generateDocs(*p, analysis, functionSignature, *verbose)
+
+	// Step 3
 	docs = polishDocs(*p, docs)
 
 	if !isValidKDoc(docs) {
@@ -46,29 +59,6 @@ func main() {
 	}
 
 	fmt.Println(docs)
-}
-
-// analyizeFunction
-//
-// Must answer: Parameters, Return semantics, Side effects, Throws
-//
-// Parameters:
-//   - code: function code to analyze
-func analyizeFunction(
-	p pipeline.Pipeline,
-	code string,
-	verbose bool,
-) string {
-	fmt.Println("Analyzing code...")
-	analysis, err := p.Analyze(code, prompts.KotlinAnalyze)
-	if err != nil {
-		panic(err)
-	}
-
-	if verbose {
-		fmt.Println(analysis)
-	}
-	return analysis
 }
 
 // generateDocs takes a function analysis and generate docs for it

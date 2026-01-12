@@ -11,12 +11,21 @@ import (
 
 type Pipeline struct {
 	Ollama *ollama.Client
+	analyzer
+}
+
+func NewPipeline(ollama *ollama.Client) *Pipeline {
+	return &Pipeline{
+		Ollama: ollama,
+		analyzer: analyzer{
+			MaxTries: 2,
+			Client:   ollama,
+		},
+	}
 }
 
 func (p Pipeline) Analyze(code, prompt string) (string, error) {
-	finalPrompt := strings.Replace(prompt, "{{FUNCTION}}", code, 1)
-
-	return p.Ollama.GenerateWithModel(finalPrompt, p.Ollama.BaseModel)
+	return p.analyzer.Analyze(code, prompt)
 }
 
 func (p Pipeline) GenerateDoc(
