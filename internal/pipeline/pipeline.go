@@ -14,12 +14,13 @@ type Pipeline struct {
 	analyzer
 }
 
-func NewPipeline(ollama *ollama.Client) *Pipeline {
+func NewPipeline(ollama *ollama.Client, verbose bool) *Pipeline {
 	return &Pipeline{
 		Ollama: ollama,
 		analyzer: analyzer{
 			MaxTries: 2,
 			Client:   ollama,
+			verbose:  verbose,
 		},
 	}
 }

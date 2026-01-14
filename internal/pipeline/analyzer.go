@@ -87,6 +87,7 @@ type FunctionAnalysis struct {
 type analyzer struct {
 	MaxTries int
 	Client   *ollama.Client
+	verbose  bool
 }
 
 func (a analyzer) Analyze(code, prompt string) (string, error) {
@@ -95,7 +96,12 @@ func (a analyzer) Analyze(code, prompt string) (string, error) {
 	var err error
 	analysis := ""
 
+	fmt.Println("Analyzing code...")
+
 	for i := range a.MaxTries {
+		if i != 0 {
+			fmt.Printf("Analyzing code: Attempt %v/%v\n", i, a.MaxTries)
+		}
 		lastTry := i == a.MaxTries-1
 
 		analysis, err = a.Client.GenerateWithModel(finalPrompt, a.Client.BaseModel)
@@ -119,6 +125,10 @@ func (a analyzer) Analyze(code, prompt string) (string, error) {
 
 	if len(analysis) == 0 {
 		return "", fmt.Errorf("failed to analyze code, tried %d times", a.MaxTries)
+	}
+
+	if a.verbose {
+		fmt.Println(analysis)
 	}
 
 	return analysis, nil

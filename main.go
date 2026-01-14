@@ -35,10 +35,9 @@ func main() {
 		DocPolishModel: "llama-kdoc:latest",
 	}
 
-	p := pipeline.NewPipeline(client)
+	p := pipeline.NewPipeline(client, *verbose)
 
 	// Step 1
-	fmt.Println("Analyzing code...")
 	analysis, err := p.Analyze(string(input), prompts.KotlinAnalyze)
 	if err != nil {
 		panic(err)
@@ -88,6 +87,7 @@ func generateDocs(
 		if verbose {
 			fmt.Println("generated docs:")
 			fmt.Println(docs)
+			fmt.Print("\n\n")
 		}
 
 		if len(docs) != 0 {
@@ -145,7 +145,7 @@ func polishDocs(p pipeline.Pipeline, docs string) string {
 		}
 
 		fmt.Println("Failed to generate polished docs!")
-		fmt.Printf("Try %v: ", i+1)
+		fmt.Printf("Polishing docs: Try %v:%v\n", i+1, tries)
 	}
 
 	panic(fmt.Errorf("failed to generate polished doc, docs=\n%v", docs))
