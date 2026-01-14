@@ -87,7 +87,7 @@ type FunctionAnalysis struct {
 type analyzer struct {
 	MaxTries int
 	Client   *ollama.Client
-	verbose  bool
+	Verbose  bool
 }
 
 func (a analyzer) Analyze(code, prompt string) (string, error) {
@@ -127,7 +127,7 @@ func (a analyzer) Analyze(code, prompt string) (string, error) {
 		return "", fmt.Errorf("failed to analyze code, tried %d times", a.MaxTries)
 	}
 
-	if a.verbose {
+	if a.Verbose {
 		fmt.Println(analysis)
 	}
 

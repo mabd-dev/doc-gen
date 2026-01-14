@@ -43,12 +43,11 @@ func main() {
 		panic(err)
 	}
 
-	if *verbose {
-		fmt.Println(analysis)
-	}
-
 	// Step 2
-	docs := generateDocs(*p, analysis, functionSignature, *verbose)
+	docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
+	if err != nil {
+		panic(err)
+	}
 
 	// Step 3
 	docs = polishDocs(*p, docs)
@@ -58,55 +57,6 @@ func main() {
 	}
 
 	fmt.Println(docs)
-}
-
-// generateDocs takes a function analysis and generate docs for it
-//
-// Output:
-//   - pure valid kdoc
-func generateDocs(
-	p pipeline.Pipeline,
-	analysis, functionSignature string,
-	verbose bool,
-) string {
-	cleanedDocs := ""
-
-	// Try max of 2 times to generate docs, if failed -> panic
-	for i := range 2 {
-		fmt.Println("Generating docs...")
-		docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
-		if err != nil {
-			panic(err)
-		}
-
-		docs, err = p.GetDocsOnly(docs)
-		if err != nil {
-			panic(err)
-		}
-
-		if verbose {
-			fmt.Println("generated docs:")
-			fmt.Println(docs)
-			fmt.Print("\n\n")
-		}
-
-		if len(docs) != 0 {
-			cleanedDocs = docs
-			break
-		}
-		fmt.Println("Failed to generate docs!")
-		fmt.Printf("Try %v: ", i+1)
-	}
-
-	if len(cleanedDocs) == 0 {
-		panic("unable to generate documentation")
-	}
-
-	if verbose {
-		fmt.Println(cleanedDocs)
-	}
-
-	return cleanedDocs
 }
 
 // polishDocs takes a docs and improve clarity, writing lanuage etc...
