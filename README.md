@@ -39,6 +39,9 @@ cat your-function.kt | ./doc-gen-ai
 
 # With verbose output to see the analysis stages
 cat your-function.kt | ./doc-gen-ai -verbose
+
+# Read kotlin function from clipboard
+./doc-gen-ai -c
 ```
 
 ## Use Cases
