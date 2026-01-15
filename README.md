@@ -68,6 +68,30 @@ This tool has been tested and optimized on the following configuration:
 - **qwen2.5-coder:7b** - Used for code analysis and documentation generation
 - **llama3.2:3b** - Used for documentation polishing and refinement
 
+## Neovim Setup
+
+- User Command
+
+Add this to `init.lua` or `init.vim`
+```lua
+vim.api.nvim_create_user_command('DocGen', function(opts)
+    local range = opts.line1 .. ',' .. opts.line2
+    local command = 'w !doc-gen-ai ' .. range
+    vim.cmd(command)
+end, { range = true })
+```
+
+run it using
+```sh
+:'<,'>DocGen
+```
+
+- Keymap
+
+```lua
+vim.keymap.set("v", "<leader>d", ":DocGen<CR>", { desc = "Generate KODoc for selected kotlin function" })
+```
+
 ## Pipeline
 
 1. **Analysis Stage**: Analyzes the Kotlin function code to extract verifiable facts (return type, suspend status, error handling, side effects, etc.)
