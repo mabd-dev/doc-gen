@@ -10,14 +10,27 @@ import (
 	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 	"github.com/mabd-dev/doc-gen-ai/internal/pipeline"
 	"github.com/mabd-dev/doc-gen-ai/internal/prompts"
+
+	"golang.design/x/clipboard"
 )
 
 func main() {
 	verbose := flag.Bool("verbose", false, "Print verbose logs")
+	readFromClipboard := flag.Bool("c", false, "Read code from clipboard")
 
 	flag.Parse()
 
-	input, _ := io.ReadAll(os.Stdin)
+	errorLoadingClipboard := clipboard.Init() != nil
+	if errorLoadingClipboard {
+		fmt.Println("WARNING: error initializing clipboard manager")
+	}
+
+	var input []byte
+	if *readFromClipboard {
+		input = clipboard.Read(clipboard.FmtText)
+	} else {
+		input, _ = io.ReadAll(os.Stdin)
+	}
 
 	functionSignature := extractSignature(string(input))
 	if len(functionSignature) == 0 {
@@ -60,6 +73,10 @@ func main() {
 	}
 
 	fmt.Println(docs)
+	if !errorLoadingClipboard {
+		clipboard.Write(clipboard.FmtText, []byte(docs))
+		fmt.Println("docs written to clipboard")
+	}
 }
 
 func extractSignature(function string) string {
