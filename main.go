@@ -43,14 +43,6 @@ func main() {
 		input, _ = io.ReadAll(os.Stdin)
 	}
 
-	functionSignature := extractSignature(string(input))
-	if len(functionSignature) == 0 {
-		logger.LogError("Could not find function signature")
-		os.Exit(1)
-	}
-
-	logger.LogDebug(functionSignature)
-
 	client := &ollama.Client{
 		BaseURL:        "http://localhost:11434",
 		BaseModel:      "qwen-kdoc",
@@ -66,7 +58,7 @@ func main() {
 	}
 
 	// Step 2
-	docs, err := p.GenerateDoc(analysis, functionSignature, prompts.KotlinKDoc)
+	docs, err := p.GenerateDoc(analysis, prompts.KotlinKDoc)
 	if err != nil {
 		panic(err)
 	}
@@ -86,20 +78,6 @@ func main() {
 		clipboard.Write(clipboard.FmtText, []byte(docs))
 		logger.LogDebug("docs written to clipboard")
 	}
-}
-
-func extractSignature(function string) string {
-	lines := strings.SplitSeq(function, "\n")
-	for line := range lines {
-		if strings.Contains(line, "fun ") {
-			signature := strings.Split(line, "{")
-			if len(signature) == 0 {
-				return ""
-			}
-			return signature[0]
-		}
-	}
-	return ""
 }
 
 func isValidKDoc(s string) bool {

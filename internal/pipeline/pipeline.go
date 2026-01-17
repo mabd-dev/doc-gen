@@ -44,9 +44,9 @@ func (p Pipeline) Analyze(code, prompt string) (string, error) {
 }
 
 func (p Pipeline) GenerateDoc(
-	analysis, signature, prompt string,
+	analysis, prompt string,
 ) (string, error) {
-	return p.generator.Generate(analysis, signature, prompt)
+	return p.generator.Generate(analysis, prompt)
 }
 
 func (p Pipeline) PolishDoc(docs, prompt string) (string, error) {

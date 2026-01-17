@@ -15,7 +15,7 @@ type generator struct {
 }
 
 func (g generator) Generate(
-	analysis, signature, prompt string,
+	analysis, prompt string,
 ) (string, error) {
 
 	for i := range g.MaxTries {
@@ -29,7 +29,6 @@ func (g generator) Generate(
 		lastTry := i == g.MaxTries-1
 
 		finalPrompt := strings.Replace(prompt, "{{ANALYSIS}}", analysis, 1)
-		finalPrompt = strings.Replace(finalPrompt, "{{SIGNATURE}}", signature, 1)
 
 		docs, err := g.Client.GenerateWithModel(finalPrompt, g.Client.BaseModel)
 
