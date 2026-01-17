@@ -33,3 +33,4 @@ go.work.sum
 
 .claude/
 local/
+doc-gen-ai
