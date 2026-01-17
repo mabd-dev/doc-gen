@@ -42,7 +42,18 @@ cat your-function.kt | ./doc-gen-ai -verbose
 
 # Read kotlin function from clipboard
 ./doc-gen-ai -c
+
 ```
+
+### Flags
+
+| Flag | Short Flag | Type | Description |
+|-------|-------|-------------|-------------|
+| --verbose | -v | bool | Print `Debug`, `Warn` & `Error` to `stderr` |
+| --quiet | -q | bool | If false, print `Info` logs to stderr |
+
+
+**Stdout** will only have final generated KDoc 
 
 ## Use Cases
 
