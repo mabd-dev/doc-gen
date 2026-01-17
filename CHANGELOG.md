@@ -1,6 +1,13 @@
 # Changelog
 
 
+## UnReleased
+
+### Updates
+- Direct all logs to `stderr` and only kdoc output on `stdout`
+- Added `quiet` flag to silent all info logs
+- Make `verbose` flag control `debug`, `warn` and `error` logs
+
 ## [0.1.0] - 2026-01-17
 
 ### ✨ Features
