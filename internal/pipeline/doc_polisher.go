@@ -17,7 +17,7 @@ type polisher struct {
 func (p polisher) polish(docs, prompt string) (string, error) {
 	for i := range p.MaxTries {
 		if i == 0 {
-			p.Logger.LogInfo("Polishing docs")
+			p.Logger.LogInfo("Polishing docs...")
 		} else {
 			p.Logger.LogInfo("Polishing docs, attempts %v/%v\n", i, p.MaxTries)
 		}

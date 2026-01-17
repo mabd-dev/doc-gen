@@ -21,7 +21,7 @@ func (g generator) Generate(
 	for i := range g.MaxTries {
 
 		if i == 0 {
-			g.Logger.LogInfo("Generating docs")
+			g.Logger.LogInfo("Generating docs...")
 		} else {
 			g.Logger.LogInfo("Generating docs, attempt %v/%v\n", i+1, g.MaxTries)
 		}
