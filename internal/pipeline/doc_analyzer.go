@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/logger"
 	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
@@ -87,7 +88,7 @@ type FunctionAnalysis struct {
 type analyzer struct {
 	MaxTries int
 	Client   *ollama.Client
-	Verbose  bool
+	Logger   logger.Logger
 }
 
 func (a analyzer) Analyze(code, prompt string) (string, error) {
@@ -96,11 +97,11 @@ func (a analyzer) Analyze(code, prompt string) (string, error) {
 	var err error
 	analysis := ""
 
-	fmt.Println("Analyzing code...")
+	a.Logger.LogInfo("Analyzing code...")
 
 	for i := range a.MaxTries {
 		if i != 0 {
-			fmt.Printf("Analyzing code: Attempt %v/%v\n", i, a.MaxTries)
+			a.Logger.LogInfo("Analyzing code: Attempt %v/%v\n", i, a.MaxTries)
 		}
 		lastTry := i == a.MaxTries-1
 
@@ -127,9 +128,7 @@ func (a analyzer) Analyze(code, prompt string) (string, error) {
 		return "", fmt.Errorf("failed to analyze code, tried %d times", a.MaxTries)
 	}
 
-	if a.Verbose {
-		fmt.Println(analysis)
-	}
+	a.Logger.LogDebug(analysis)
 
 	return analysis, nil
 

@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/logger"
 	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type polisher struct {
 	MaxTries int
 	Client   *ollama.Client
-	Verbose  bool
+	Logger   logger.Logger
 }
 
 func (p polisher) polish(docs, prompt string) (string, error) {
 	for i := range p.MaxTries {
 		if i == 0 {
-			fmt.Println("Polishing docs")
+			p.Logger.LogInfo("Polishing docs")
 		} else {
-			fmt.Printf("Polishing docs, attempts %v/%v\n", i, p.MaxTries)
+			p.Logger.LogInfo("Polishing docs, attempts %v/%v\n", i, p.MaxTries)
 		}
 
 		lastTry := i == p.MaxTries-1
@@ -30,9 +31,7 @@ func (p polisher) polish(docs, prompt string) (string, error) {
 			if lastTry {
 				return "", err
 			}
-			if p.Verbose {
-				fmt.Println(err.Error())
-			}
+			p.Logger.LogError(err.Error())
 		}
 
 		polishedDocs, err = getDocsOnly(polishedDocs)
@@ -41,15 +40,11 @@ func (p polisher) polish(docs, prompt string) (string, error) {
 			if lastTry {
 				return "", err
 			}
-			if p.Verbose {
-				fmt.Println(err.Error())
-			}
+			p.Logger.LogError(err.Error())
 		}
 
 		if len(polishedDocs) != 0 {
-			if p.Verbose {
-				fmt.Println(polishedDocs)
-			}
+			p.Logger.LogDebug(polishedDocs)
 			return polishedDocs, nil
 		}
 

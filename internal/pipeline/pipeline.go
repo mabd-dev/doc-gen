@@ -2,33 +2,39 @@
 package pipeline
 
 import (
+	"github.com/mabd-dev/doc-gen-ai/internal/logger"
 	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type Pipeline struct {
+	logger    logger.Logger
 	Ollama    *ollama.Client
 	analyzer  analyzer
 	generator generator
 	polisher  polisher
 }
 
-func NewPipeline(ollama *ollama.Client, verbose bool) *Pipeline {
+func NewPipeline(
+	ollama *ollama.Client,
+	logger logger.Logger,
+) *Pipeline {
 	return &Pipeline{
+		logger: logger,
 		Ollama: ollama,
 		analyzer: analyzer{
 			MaxTries: 2,
 			Client:   ollama,
-			Verbose:  verbose,
+			Logger:   logger,
 		},
 		generator: generator{
 			MaxTries: 2,
 			Client:   ollama,
-			Verbose:  verbose,
+			Logger:   logger,
 		},
 		polisher: polisher{
 			MaxTries: 2,
 			Client:   ollama,
-			Verbose:  verbose,
+			Logger:   logger,
 		},
 	}
 }

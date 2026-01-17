@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/logger"
 	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type generator struct {
 	MaxTries int
 	Client   *ollama.Client
-	Verbose  bool
+	Logger   logger.Logger
 }
 
 func (g generator) Generate(
@@ -20,9 +21,9 @@ func (g generator) Generate(
 	for i := range g.MaxTries {
 
 		if i == 0 {
-			fmt.Println("Generating docs")
+			g.Logger.LogInfo("Generating docs")
 		} else {
-			fmt.Printf("Generating docs, attempt %v/%v\n", i+1, g.MaxTries)
+			g.Logger.LogInfo("Generating docs, attempt %v/%v\n", i+1, g.MaxTries)
 		}
 
 		lastTry := i == g.MaxTries-1
@@ -36,9 +37,7 @@ func (g generator) Generate(
 			if lastTry {
 				return "", err
 			} else {
-				if g.Verbose {
-					fmt.Println(err.Error())
-				}
+				g.Logger.LogError(err.Error())
 			}
 		}
 
@@ -48,16 +47,12 @@ func (g generator) Generate(
 			if lastTry {
 				return "", err
 			} else {
-				if g.Verbose {
-					fmt.Println(err.Error())
-				}
+				g.Logger.LogError(err.Error())
 			}
 		}
 
 		if len(docs) != 0 {
-			if g.Verbose {
-				fmt.Println(docs)
-			}
+			g.Logger.LogDebug(docs)
 			return docs, nil
 		}
 
