@@ -1,13 +1,10 @@
 # KDoc Generator
-
 Automatically generate high-quality KDoc documentation for your Kotlin functions using local AI models.
 
 ## Why This Exists
-
 Documentation is critical for maintainable code, yet it's often the first thing to fall behind in fast-paced development. Manual documentation is time-consuming, inconsistent, and rarely reflects the actual behavior of the code. This tool bridges that gap.
 
 ## How This Tool Helps
-
 This CLI tool analyzes your Kotlin functions and generates accurate, consistent KDoc comments automatically. Instead of spending hours writing documentation, you get:
 
 ### 1. **Instant Documentation Coverage**
@@ -31,45 +28,44 @@ The tool analyzes side effects, error handling, and suspension behavior—detail
 ### 6. **Privacy-First Approach**
 Uses local LLM models via Ollama. Your code never leaves your machine, making it suitable for proprietary and sensitive codebases.
 
-## Quick Start
+## Installation
 
+### Using Go Install
+```bash
+go install github.com/mabd-dev/doc-gen-ai@latest
+```
+
+### Requirements
+- Ollama running locally with compatible models (see [Local Setup](#local-setup))
+
+## Quick Start
 ```bash
 # Generate documentation for a Kotlin function
-cat your-function.kt | ./doc-gen-ai
+cat your-function.kt | doc-gen-ai
 
 # With verbose output to see the analysis stages
-cat your-function.kt | ./doc-gen-ai -verbose
+cat your-function.kt | doc-gen-ai -verbose
 
 # Read kotlin function from clipboard
-./doc-gen-ai -c
-
+doc-gen-ai -c
 ```
 
 ### Flags
-
 | Flag | Short Flag | Type | Description |
 |-------|-------|-------------|-------------|
 | --verbose | -v | bool | Print `Debug`, `Warn` & `Error` to `stderr` |
 | --quiet | -q | bool | If false, print `Info` logs to stderr |
 
-
 **Stdout** will only have final generated KDoc 
 
 ## Use Cases
-
 - **Legacy Code Modernization**: Quickly add documentation to undocumented codebases
 - **API Documentation**: Generate consistent documentation for public APIs
 - **Code Reviews**: Ensure all new functions have proper KDoc before merging
 - **Onboarding**: Help new developers understand existing code through generated docs
 - **CI/CD Integration**: Automatically verify or generate documentation in your build pipeline
 
-## Requirements
-
-- Go 1.24 or later
-- Ollama running locally with compatible models
-
 ## Local Setup
-
 This tool has been tested and optimized on the following configuration:
 
 **Hardware**
@@ -80,13 +76,9 @@ This tool has been tested and optimized on the following configuration:
 - **llama3.2:3b** - Used for documentation polishing and refinement
 
 ## Neovim Setup
-
 Check [neovim plugin](https://github.com/mabd-dev/doc-gen-ai.nvim) 
 
 ## Pipeline
-
 1. **Analysis Stage**: Analyzes the Kotlin function code to extract verifiable facts (return type, suspend status, error handling, side effects, etc.)
 2. **Generation Stage**: Generates initial KDoc based on the analysis and function signature
 3. **Polish Stage**: Refines the generated KDoc for clarity and consistency
-
-

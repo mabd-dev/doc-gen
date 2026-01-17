@@ -1,0 +1,70 @@
+name: Go Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # triggers on version tags like v0.1.0, v1.2.3
+
+permissions:
+    contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libx11-dev
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+          cache: true
+
+      - name: Download Dependencies
+        run: go mod tidy
+
+      - name: Build Binary
+        run: |
+          echo "Building doc-gen-ai ..."
+          go build -o doc-gen-ai
+
+      - name: Trigger pkg.go.dev indexing
+        run: |
+          REPO="${{ github.repository }}"
+          REPO_LOWER=$(echo "$REPO" | tr '[:upper:]' '[:lower:]')
+          curl -X GET "https://proxy.golang.org/github.com/$REPO_LOWER/@v/${{ github.ref_name }}.info"
+
+      - name: Extract Release Notes
+        id: changelog
+        run: |
+          # Strip 'v' prefix from tag (v0.1.1 -> 0.1.1)
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+          
+          # Extract section between this version and the next ## header
+          NOTES=$(awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "\\[" ver "\\]") found=1; next
+            }
+            found { print }
+          ' CHANGELOG.md)
+          
+          # Write to file (handles multiline content)
+          echo "$NOTES" > release_notes.md
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body_path: release_notes.md
+          generate_release_notes: false
+          files: dist/*
