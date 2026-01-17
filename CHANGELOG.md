@@ -1,12 +1,15 @@
 # Changelog
 
-
 ## UnReleased
 
 ### Updates
-- Direct all logs to `stderr` and only kdoc output on `stdout`
-- Added `quiet` flag to silent all info logs
-- Make `verbose` flag control `debug`, `warn` and `error` logs
+
+## [0.1.1] - 2026-01-17
+
+### Updates
+- Separate output streams: KDoc to stdout, logs to stderr
+- Add `--quiet` flag to suppress info messages
+- Add `--verbose` flag for debug/warn/error messages
 
 ## [0.1.0] - 2026-01-17
 
