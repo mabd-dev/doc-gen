@@ -70,27 +70,7 @@ This tool has been tested and optimized on the following configuration:
 
 ## Neovim Setup
 
-- User Command
-
-Add this to `init.lua` or `init.vim`
-```lua
-vim.api.nvim_create_user_command('DocGen', function(opts)
-    local range = opts.line1 .. ',' .. opts.line2
-    local command = 'w !doc-gen-ai ' .. range
-    vim.cmd(command)
-end, { range = true })
-```
-
-run it using
-```sh
-:'<,'>DocGen
-```
-
-- Keymap
-
-```lua
-vim.keymap.set("v", "<leader>d", ":DocGen<CR>", { desc = "Generate KODoc for selected kotlin function" })
-```
+Check [neovim plugin](https://github.com/mabd-dev/doc-gen-ai.nvim) 
 
 ## Pipeline
 
