@@ -38,7 +38,8 @@ go install github.com/mabd-dev/doc-gen-ai@latest
     - Ollama running locally with compatible models (see [Local Setup](#local-setup))
 
 - For Remote Models
-    - [GROQ](https://groq.com/) api keys. Default models are free to use with minute/hour/day limits, but for most developers free tier is fine
+    - [GROQ](https://groq.com/) api key in env variable with name `GROQ_API_KEY`. 
+    - Default models are free to use but they have minute/hour/day limits. For most developers free tier is fine
 
 ## Quick Start
 ```bash
