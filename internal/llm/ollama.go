@@ -10,6 +10,7 @@ type OllamaClient struct {
 	BaseURL        string
 	BaseModel      string
 	DocPolishModel string
+	PolishDocs     bool
 }
 
 type ollamaRequest struct {
@@ -20,6 +21,10 @@ type ollamaRequest struct {
 
 type ollamaResponse struct {
 	Response string `json:"response"`
+}
+
+func (c OllamaClient) ShouldDoDocsPolishig() bool {
+	return c.PolishDocs
 }
 
 func (c OllamaClient) GetBaseModel() string {

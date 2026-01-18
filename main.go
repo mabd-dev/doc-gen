@@ -72,9 +72,11 @@ func main() {
 	}
 
 	// Step 3
-	docs, err = pipeline.PolishDoc(docs, prompts.KotlinKDocPolish)
-	if err != nil {
-		panic(err)
+	if client.ShouldDoDocsPolishig() {
+		docs, err = pipeline.PolishDoc(docs, prompts.KotlinKDocPolish)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	if !isValidKDoc(docs) {

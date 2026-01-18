@@ -13,9 +13,10 @@ var (
 )
 
 type OpenAIClient struct {
-	BaseURL   string
-	APIKey    string
-	BaseModel string
+	BaseURL    string
+	APIKey     string
+	BaseModel  string
+	PolishDocs bool
 }
 
 type message struct {
@@ -42,6 +43,10 @@ type openAIResponse struct {
 	Error *struct {
 		Message string `json:"message"`
 	} `json:"error,omitempty"`
+}
+
+func (c OpenAIClient) ShouldDoDocsPolishig() bool {
+	return c.PolishDocs
 }
 
 func (c OpenAIClient) GetBaseModel() string {

@@ -7,6 +7,8 @@ import (
 )
 
 type Client interface {
+	ShouldDoDocsPolishig() bool
+
 	GetBaseModel() string
 	GetDocPolishModel() string
 
@@ -21,12 +23,14 @@ func NewClient(provider string) (Client, error) {
 			BaseURL:        "http://localhost:11434",
 			BaseModel:      "qwen-kdoc",
 			DocPolishModel: "llama-kdoc:latest",
+			PolishDocs:     true,
 		}, nil
 	case "grok":
 		return OpenAIClient{
-			BaseURL:   "https://api.groq.com/openai/v1",
-			APIKey:    os.Getenv("GROQ_API_KEY"),
-			BaseModel: "qwen/qwen3-32b",
+			BaseURL:    "https://api.groq.com/openai/v1",
+			APIKey:     os.Getenv("GROQ_API_KEY"),
+			BaseModel:  "qwen/qwen3-32b",
+			PolishDocs: false,
 		}, nil
 	default:
 		err := fmt.Errorf("`%v` provider not supported", provider)
