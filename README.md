@@ -51,10 +51,11 @@ doc-gen-ai -c
 ```
 
 ### Flags
-| Flag | Short Flag | Type | Description |
-|-------|-------|-------------|-------------|
-| --verbose | -v | bool | Print `Debug`, `Warn` & `Error` to `stderr` |
-| --quiet | -q | bool | If false, print `Info` logs to stderr |
+| Flag | Short Flag | Type | Default | Description |
+|-------|-------|-------------|-------------|-------------|
+| --verbose | -v | bool | false | Print `Debug`, `Warn` & `Error` to `stderr` |
+| --quiet | -q | bool | false  | If false, print `Info` logs to stderr |
+| --provider | -p | string | Ollama | Available providers: `Ollama`, `Grok` |
 
 **Stdout** will only have final generated KDoc 
 
