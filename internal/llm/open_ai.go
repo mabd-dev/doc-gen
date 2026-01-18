@@ -8,8 +8,11 @@ import (
 )
 
 var (
-	defaultTemprature float32 = 0.2
-	defaultTopP       float32 = 0.9
+	defaultTemprature       float32 = 0.2
+	defaultTopP             float32 = 0.9
+	DefaultOpenAIBaseURL    string  = "https://api.groq.com/openai/v1"
+	DefaultOpenAIBaseModel  string  = "qwen/qwen3-32b"
+	DefaultOpenAIPolishDocs bool    = false
 )
 
 type OpenAIClient struct {

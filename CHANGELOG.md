@@ -7,6 +7,9 @@
 - Groq as first supported remote provider
 - `--provider` flag to switch between `ollama` and `groq`
 
+### Updates
+- Add CLI flags to control `baseURL`, `baseModel` & `polishDocs` per provider
+
 
 ## [0.1.1] - 2026-01-17
 

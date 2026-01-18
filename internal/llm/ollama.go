@@ -6,6 +6,12 @@ import (
 	"net/http"
 )
 
+var (
+	DefaultOllamaBaseURL    string = "http://localhost:11434"
+	DefaultOllamaBaseModel  string = "qwen2.5-coder:7b"
+	DefaultOllamaPolishDocs bool   = true
+)
+
 type OllamaClient struct {
 	BaseURL        string
 	BaseModel      string

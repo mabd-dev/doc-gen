@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	clitypes "github.com/mabd-dev/doc-gen-ai/internal/cli_types"
 	"github.com/mabd-dev/doc-gen-ai/internal/llm"
 	"github.com/mabd-dev/doc-gen-ai/internal/logger"
 	"github.com/mabd-dev/doc-gen-ai/internal/pipeline"
@@ -24,6 +25,12 @@ func main() {
 
 	providerFlag := flag.String("provider", "ollama", "Provider to use, options=(ollama, Groq)")
 	pFlag := flag.String("p", "ollama", "Provider to use, options=(ollama, Groq)")
+
+	baseURLFlag := flag.String("base-url", llm.DefaultOllamaBaseURL, "Base url for selected provider")
+	baseModelFlag := flag.String("base-model", llm.DefaultOllamaBaseModel, "Base llm model")
+
+	var polishDocsFlag clitypes.OptionalBool
+	flag.Var(&polishDocsFlag, "polish-docs", "true / false")
 
 	readFromClipboard := flag.Bool("c", false, "Read code from clipboard")
 
@@ -51,7 +58,7 @@ func main() {
 		selectedProvider = strings.TrimSpace(*pFlag)
 	}
 
-	client, err := llm.NewClient(selectedProvider)
+	client, err := llm.NewClient(selectedProvider, baseURLFlag, baseModelFlag, polishDocsFlag)
 	if err != nil {
 		logger.LogError(err.Error())
 		os.Exit(1)
