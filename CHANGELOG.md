@@ -1,8 +1,12 @@
 # Changelog
 
-## UnReleased
+## Unreleased
 
-### Updates
+### ✨ Added
+- Remote LLM support via OpenAI-compatible API
+- Groq as first supported remote provider
+- `--provider` flag to switch between `ollama` and `groq`
+
 
 ## [0.1.1] - 2026-01-17
 
