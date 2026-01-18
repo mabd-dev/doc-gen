@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.2.0] - 2026-01-18
+
 ### ✨ Added
 - Remote LLM support via OpenAI-compatible API
 - Groq as first supported remote provider
@@ -19,6 +21,7 @@
 - Add `--verbose` flag for debug/warn/error messages
 
 ## [0.1.0] - 2026-01-17
+
 
 ### ✨ Features
 
