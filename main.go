@@ -22,8 +22,8 @@ func main() {
 	quietFlag := flag.Bool("quiet", false, "If false, print `Info` logs to stderr")
 	qFlag := flag.Bool("q", false, "If false, print `Info` logs to stderr")
 
-	providerFlag := flag.String("provider", "ollama", "Provider to use, options=(ollama, GROK)")
-	pFlag := flag.String("p", "ollama", "Provider to use, options=(ollama, GROK)")
+	providerFlag := flag.String("provider", "ollama", "Provider to use, options=(ollama, Groq)")
+	pFlag := flag.String("p", "ollama", "Provider to use, options=(ollama, Groq)")
 
 	readFromClipboard := flag.Bool("c", false, "Read code from clipboard")
 

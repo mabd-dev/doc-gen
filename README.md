@@ -58,7 +58,7 @@ doc-gen-ai -c
 |-------|-------|-------------|-------------|-------------|
 | --verbose | -v | bool | false | Print `Debug`, `Warn` & `Error` to `stderr` |
 | --quiet | -q | bool | false  | If false, print `Info` logs to stderr |
-| --provider | -p | string | Ollama | Available providers: `Ollama`, `Grok` |
+| --provider | -p | string | Ollama | Available providers: `Ollama`, `Groq` |
 
 **Stdout** will only have final generated KDoc 
 
@@ -81,7 +81,7 @@ This tool has been tested and optimized on the following configuration:
     - **qwen2.5-coder:7b** - Used for code analysis and documentation generation
     - **llama3.2:3b** - Used for documentation polishing and refinement
 
-- Remote (GROK)
+- Remote (Groq)
     - qwen/qwen3-32b - Used for code analysis, documentation and polishing
 
 ## Neovim Setup

@@ -25,7 +25,7 @@ func NewClient(provider string) (Client, error) {
 			DocPolishModel: "llama-kdoc:latest",
 			PolishDocs:     true,
 		}, nil
-	case "grok":
+	case "groq":
 		return OpenAIClient{
 			BaseURL:    "https://api.groq.com/openai/v1",
 			APIKey:     os.Getenv("GROQ_API_KEY"),
