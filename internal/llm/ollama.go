@@ -10,16 +10,21 @@ type OllamaClient struct {
 	BaseURL        string
 	BaseModel      string
 	DocPolishModel string
+	PolishDocs     bool
 }
 
-type request struct {
+type ollamaRequest struct {
 	Model  string `json:"model"`
 	Prompt string `json:"prompt"`
 	Stream bool   `json:"stream"`
 }
 
-type response struct {
+type ollamaResponse struct {
 	Response string `json:"response"`
+}
+
+func (c OllamaClient) ShouldDoDocsPolishig() bool {
+	return c.PolishDocs
 }
 
 func (c OllamaClient) GetBaseModel() string {
@@ -43,7 +48,7 @@ func (c OllamaClient) GenerateWithModel(
 		modelToUse = model
 	}
 
-	reqBody, _ := json.Marshal(request{
+	reqBody, _ := json.Marshal(ollamaRequest{
 		Model:  modelToUse,
 		Prompt: prompt,
 		Stream: false,
@@ -59,7 +64,7 @@ func (c OllamaClient) GenerateWithModel(
 	}
 	defer resp.Body.Close()
 
-	var result response
+	var result ollamaResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	return result.Response, err
 }

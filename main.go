@@ -16,19 +16,22 @@ import (
 )
 
 func main() {
-	verbose := flag.Bool("verbose", false, "Print `Debug`, `Warn` & `Error` to `stderr` ")
-	v := flag.Bool("v", false, "Print `Debug`, `Warn` & `Error` to `stderr` ")
+	verboseFlag := flag.Bool("verbose", false, "Print `Debug`, `Warn` & `Error` to `stderr` ")
+	vFlag := flag.Bool("v", false, "Print `Debug`, `Warn` & `Error` to `stderr` ")
 
-	quiet := flag.Bool("quiet", false, "If false, print `Info` logs to stderr")
-	q := flag.Bool("q", false, "If false, print `Info` logs to stderr")
+	quietFlag := flag.Bool("quiet", false, "If false, print `Info` logs to stderr")
+	qFlag := flag.Bool("q", false, "If false, print `Info` logs to stderr")
+
+	providerFlag := flag.String("provider", "ollama", "Provider to use, options=(ollama, GROK)")
+	pFlag := flag.String("p", "ollama", "Provider to use, options=(ollama, GROK)")
 
 	readFromClipboard := flag.Bool("c", false, "Read code from clipboard")
 
 	flag.Parse()
 
 	logger := logger.Logger{
-		Quiet:   *quiet || *q,
-		Verbose: *verbose || *v,
+		Quiet:   *quietFlag || *qFlag,
+		Verbose: *verboseFlag || *vFlag,
 	}
 
 	errorLoadingClipboard := clipboard.Init() != nil
@@ -43,30 +46,37 @@ func main() {
 		input, _ = io.ReadAll(os.Stdin)
 	}
 
-	client := llm.OllamaClient{
-		BaseURL:        "http://localhost:11434",
-		BaseModel:      "qwen-kdoc",
-		DocPolishModel: "llama-kdoc:latest",
+	selectedProvider := *providerFlag
+	if pFlag != nil && len(strings.TrimSpace(*pFlag)) > 0 {
+		selectedProvider = strings.TrimSpace(*pFlag)
 	}
 
-	p := pipeline.NewPipeline(client, logger)
+	client, err := llm.NewClient(selectedProvider)
+	if err != nil {
+		logger.LogError(err.Error())
+		os.Exit(1)
+	}
+
+	pipeline := pipeline.NewPipeline(client, logger)
 
 	// Step 1
-	analysis, err := p.Analyze(string(input), prompts.KotlinAnalyze)
+	analysis, err := pipeline.Analyze(string(input), prompts.KotlinAnalyze)
 	if err != nil {
 		panic(err)
 	}
 
 	// Step 2
-	docs, err := p.GenerateDoc(analysis, prompts.KotlinKDoc)
+	docs, err := pipeline.GenerateDoc(analysis, prompts.KotlinKDoc)
 	if err != nil {
 		panic(err)
 	}
 
 	// Step 3
-	docs, err = p.PolishDoc(docs, prompts.KotlinKDocPolish)
-	if err != nil {
-		panic(err)
+	if client.ShouldDoDocsPolishig() {
+		docs, err = pipeline.PolishDoc(docs, prompts.KotlinKDocPolish)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	if !isValidKDoc(docs) {

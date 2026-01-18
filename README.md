@@ -1,5 +1,5 @@
 # KDoc Generator
-Automatically generate high-quality KDoc documentation for your Kotlin functions using local AI models.
+Automatically generate high-quality KDoc documentation for your Kotlin functions using local/Remote AI models.
 
 ## Why This Exists
 Documentation is critical for maintainable code, yet it's often the first thing to fall behind in fast-paced development. Manual documentation is time-consuming, inconsistent, and rarely reflects the actual behavior of the code. This tool bridges that gap.
@@ -25,9 +25,6 @@ Stay in your coding flow. Pipe a function to the tool, get documentation back. N
 ### 5. **Better Code Understanding**
 The tool analyzes side effects, error handling, and suspension behavior—details that are easy to miss in manual documentation but critical for correct API usage.
 
-### 6. **Privacy-First Approach**
-Uses local LLM models via Ollama. Your code never leaves your machine, making it suitable for proprietary and sensitive codebases.
-
 ## Installation
 
 ### Using Go Install
@@ -36,7 +33,13 @@ go install github.com/mabd-dev/doc-gen-ai@latest
 ```
 
 ### Requirements
-- Ollama running locally with compatible models (see [Local Setup](#local-setup))
+
+- For Local Models
+    - Ollama running locally with compatible models (see [Local Setup](#local-setup))
+
+- For Remote Models
+    - [GROQ](https://groq.com/) api key in env variable with name `GROQ_API_KEY`. 
+    - Default models are free to use but they have minute/hour/day limits. For most developers free tier is fine
 
 ## Quick Start
 ```bash
@@ -51,10 +54,11 @@ doc-gen-ai -c
 ```
 
 ### Flags
-| Flag | Short Flag | Type | Description |
-|-------|-------|-------------|-------------|
-| --verbose | -v | bool | Print `Debug`, `Warn` & `Error` to `stderr` |
-| --quiet | -q | bool | If false, print `Info` logs to stderr |
+| Flag | Short Flag | Type | Default | Description |
+|-------|-------|-------------|-------------|-------------|
+| --verbose | -v | bool | false | Print `Debug`, `Warn` & `Error` to `stderr` |
+| --quiet | -q | bool | false  | If false, print `Info` logs to stderr |
+| --provider | -p | string | Ollama | Available providers: `Ollama`, `Grok` |
 
 **Stdout** will only have final generated KDoc 
 
@@ -71,9 +75,14 @@ This tool has been tested and optimized on the following configuration:
 **Hardware**
 - MacBook Pro M3 Pro with 18GB RAM
 
-**AI Models** (via Ollama)
-- **qwen2.5-coder:7b** - Used for code analysis and documentation generation
-- **llama3.2:3b** - Used for documentation polishing and refinement
+**AI Models** 
+
+- Local (via Ollama)
+    - **qwen2.5-coder:7b** - Used for code analysis and documentation generation
+    - **llama3.2:3b** - Used for documentation polishing and refinement
+
+- Remote (GROK)
+    - qwen/qwen3-32b - Used for code analysis, documentation and polishing
 
 ## Neovim Setup
 Check [neovim plugin](https://github.com/mabd-dev/doc-gen-ai.nvim) 
