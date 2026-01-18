@@ -58,9 +58,30 @@ doc-gen-ai -c
 |-------|-------|-------------|-------------|-------------|
 | --verbose | -v | bool | false | Print `Debug`, `Warn` & `Error` to `stderr` |
 | --quiet | -q | bool | false  | If false, print `Info` logs to stderr |
-| --provider | -p | string | Ollama | Available providers: `Ollama`, `Groq` |
+| --provider | -p | string | Ollama | Options: `Ollama`, `Groq` |
+
 
 **Stdout** will only have final generated KDoc 
+
+### Cli Flags per Provider
+
+#### Ollama
+
+| Flag | Type | Default | Description |
+|-------|-------------|-------------|-------------|
+| --base-url | string | http://localhost:11434 |  |
+| --base-model | string | qwen2.5-coder:7b |  |
+| --polish-docs | bool | true | Polishes the output for clarity and readability  |
+
+
+#### Groq
+
+| Flag | Type | Default | Description |
+|-------|-------------|-------------|-------------|
+| --base-url | string | https://api.groq.com/openai/v1 |  |
+| --base-model | string | qwen/qwen3-32b |  |
+| --polish-docs | bool | false | Polishes the output for clarity and readability  |
+
 
 ## Use Cases
 - **Legacy Code Modernization**: Quickly add documentation to undocumented codebases
