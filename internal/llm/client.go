@@ -2,6 +2,7 @@ package llm
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -22,8 +23,11 @@ func NewClient(provider string) (Client, error) {
 			DocPolishModel: "llama-kdoc:latest",
 		}, nil
 	case "grok":
-		err := fmt.Errorf("GROK provider not implemented yet")
-		return nil, err
+		return OpenAIClient{
+			BaseURL:   "https://api.groq.com/openai/v1",
+			APIKey:    os.Getenv("GROQ_API_KEY"),
+			BaseModel: "qwen/qwen3-32b",
+		}, nil
 	default:
 		err := fmt.Errorf("`%v` provider not supported", provider)
 		return nil, err
