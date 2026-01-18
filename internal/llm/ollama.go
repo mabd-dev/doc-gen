@@ -1,4 +1,4 @@
-package ollama
+package llm
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type Client struct {
+type OllamaClient struct {
 	BaseURL        string
 	BaseModel      string
 	DocPolishModel string
@@ -22,11 +22,19 @@ type response struct {
 	Response string `json:"response"`
 }
 
-func (c *Client) Generate(prompt string) (string, error) {
+func (c OllamaClient) GetBaseModel() string {
+	return c.BaseModel
+}
+
+func (c OllamaClient) GetDocPolishModel() string {
+	return c.DocPolishModel
+}
+
+func (c OllamaClient) Generate(prompt string) (string, error) {
 	return c.GenerateWithModel(prompt, "")
 }
 
-func (c *Client) GenerateWithModel(
+func (c OllamaClient) GenerateWithModel(
 	prompt string,
 	model string,
 ) (string, error) {

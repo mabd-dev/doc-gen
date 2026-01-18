@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/llm"
 	"github.com/mabd-dev/doc-gen-ai/internal/logger"
-	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type polisher struct {
 	MaxTries int
-	Client   *ollama.Client
+	Client   llm.Client
 	Logger   logger.Logger
 }
 
@@ -25,7 +25,7 @@ func (p polisher) polish(docs, prompt string) (string, error) {
 		lastTry := i == p.MaxTries-1
 
 		finalPrompt := strings.Replace(prompt, "{{KDOC}}", docs, 1)
-		polishedDocs, err := p.Client.GenerateWithModel(finalPrompt, p.Client.DocPolishModel)
+		polishedDocs, err := p.Client.GenerateWithModel(finalPrompt, p.Client.GetDocPolishModel())
 
 		if err != nil {
 			if lastTry {

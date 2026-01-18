@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/llm"
 	"github.com/mabd-dev/doc-gen-ai/internal/logger"
-	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type Visibility string
@@ -87,7 +87,7 @@ type FunctionAnalysis struct {
 
 type analyzer struct {
 	MaxTries int
-	Client   *ollama.Client
+	Client   llm.Client
 	Logger   logger.Logger
 }
 
@@ -105,7 +105,7 @@ func (a analyzer) Analyze(code, prompt string) (string, error) {
 		}
 		lastTry := i == a.MaxTries-1
 
-		analysis, err = a.Client.GenerateWithModel(finalPrompt, a.Client.BaseModel)
+		analysis, err = a.Client.GenerateWithModel(finalPrompt, a.Client.GetBaseModel())
 		if err != nil {
 			if lastTry {
 				return "", err

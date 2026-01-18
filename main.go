@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/llm"
 	"github.com/mabd-dev/doc-gen-ai/internal/logger"
-	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 	"github.com/mabd-dev/doc-gen-ai/internal/pipeline"
 	"github.com/mabd-dev/doc-gen-ai/internal/prompts"
 
@@ -43,7 +43,7 @@ func main() {
 		input, _ = io.ReadAll(os.Stdin)
 	}
 
-	client := &ollama.Client{
+	client := llm.OllamaClient{
 		BaseURL:        "http://localhost:11434",
 		BaseModel:      "qwen-kdoc",
 		DocPolishModel: "llama-kdoc:latest",

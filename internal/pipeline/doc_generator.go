@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mabd-dev/doc-gen-ai/internal/llm"
 	"github.com/mabd-dev/doc-gen-ai/internal/logger"
-	"github.com/mabd-dev/doc-gen-ai/internal/ollama"
 )
 
 type generator struct {
 	MaxTries int
-	Client   *ollama.Client
+	Client   llm.Client
 	Logger   logger.Logger
 }
 
@@ -30,7 +30,7 @@ func (g generator) Generate(
 
 		finalPrompt := strings.Replace(prompt, "{{ANALYSIS}}", analysis, 1)
 
-		docs, err := g.Client.GenerateWithModel(finalPrompt, g.Client.BaseModel)
+		docs, err := g.Client.GenerateWithModel(finalPrompt, g.Client.GetBaseModel())
 
 		if err != nil {
 			if lastTry {
